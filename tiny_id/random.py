@@ -1,34 +1,34 @@
 # standard libraries
-pass
+import random
+import math
 # third party libraries
-import numpy
-# podimetrics libraries
 pass
+# podimetrics libraries
+from . import corpus
 
-# define the corpus as alphanumeric, url-safe characters that are 
-# unlikely to be mistaken for each other
-_CORPUS = list("23456789"
-               "ABCDEFGHJKLMNPQRSTUVWXYZ"
-               "abcdefghijkmnopqrstuvwxyz")
 
-def collision_likelihood(length):
-    pass
+def sample_with_replacement(population, number=1):
+    for i in range(number):
+        yield random.choice(population)
 
-def bits_to_length(n):
-    base = len(_CORPUS)
-    length = int(bits/numpy.log2(base) + 0.5)
+
+def bits_to_length(bits, corpus=corpus.legible):
+    base = len(corpus)
+    length = int(bits/math.log2(base) + 0.5)
     return length
 
-def generate(length=22):
-    """
-    length = 22 corresponds to > 128 bits of entropy (comparable to uuid)
 
-    if you wanted bits instead
+def length_to_bits(length, corpus=corpus.legible):
+    base = len(corpus)
+    bits = int(length*math.log2(base))
+    return bits
 
-    the birthday paradox can be used to estimate probability of collision 
-    Pr ~= 1 - exp(-n**2/(2*d))
 
-    where n is the number of random ids generated, and d = 2**bits
-    """
-    random_string, = numpy.random.choice(_CORPUS, length).view('S' + str(length))
+def collision_likelihood(length, number=1, corpus=corpus.legible):
+    bits = length_to_bits(length, corpus)
+    return 1.0 - math.exp(-0.5*number**2/2**bits)
+
+
+def generate(length=22, corpus=corpus.legible):
+    random_string = ''.join(sample_with_replacement(corpus, length))
     return random_string
