@@ -3,7 +3,7 @@ import os
 # third party libraries
 pass
 # first party libraries
-from . import (random, temporal)
+from . import (random, temporal, )
 
 _where = os.path.dirname(os.path.abspath(__file__))
 
