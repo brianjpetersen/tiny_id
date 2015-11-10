@@ -4,7 +4,10 @@ import datetime
 # third party libraries
 pass
 # podimetrics libraries
-from . import (corpus, random)
+from . import (corpus, _random)
+
+
+random = _random
 
 
 def stringify_int(i, corpus=corpus.legible):
@@ -15,18 +18,19 @@ def stringify_int(i, corpus=corpus.legible):
         s = corpus[indx] + s
     return s
 
+
 PYTHON_VERSION = sys.version_info[:2]
 if PYTHON_VERSION >= (3, 0):
     MIN_DATETIME = datetime.datetime.min
 else:
     MIN_DATETIME = datetime.datetime(1900, 1, 1)
 
+
 MIN_STRINGIFIED_DATETIME = stringify_int(int(MIN_DATETIME.strftime('%Y%m%d%H%M%S%f')))
 MAX_STRINGIFIED_DATETIME = stringify_int(int(datetime.datetime.max.strftime('%Y%m%d%H%M%S%f')))
 
 
-def generate(when=None, random_length=0, corpus=corpus.legible, dense=True,
-             precision='microsecond'):
+def generate(when=None, random_length=0, corpus=corpus.legible, precision='microsecond'):
     if when is None:
         when = datetime.datetime.utcnow()
     if precision == 'microsecond':
@@ -50,6 +54,5 @@ def generate(when=None, random_length=0, corpus=corpus.legible, dense=True,
                           second, minute, hour, day, month, or year.')
     random_id = random.generate(random_length, corpus)
     when = when.strftime('%Y%m%d%H%M%S%f')[:upper_bound]
-    if not dense:
-        when = stringify_int(int(when)).rjust(len(MAX_STRINGIFIED_DATETIME), min(corpus))
+    #when = stringify_int(int(when)).rjust(len(MAX_STRINGIFIED_DATETIME), min(corpus))
     return when + random_id
