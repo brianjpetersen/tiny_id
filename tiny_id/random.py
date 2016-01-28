@@ -4,7 +4,7 @@ import math
 # third party libraries
 pass
 # podimetrics libraries
-from . import corpus
+from . import (corpus, )
 
 
 def sample_with_replacement(population, number=1):
